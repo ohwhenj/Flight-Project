@@ -2,3 +2,4 @@
 Repositry for programming project relating to flight data
 
 Conor Keogh
+Owen Doherty
