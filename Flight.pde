@@ -1,19 +1,29 @@
 class Flight {
+  String flDate;
+  String carrier;
   String origin;
   String dest;
-  int distance;
+  String depTime;
+  String arrTime;
+  int    cancelled;
+  int    diverted;
+  int    distance;
 
-  Flight(String origin, String dest, int distance) {
-    this.origin = origin;
-    this.dest = dest;
-    this.distance = distance;
+  Flight(TableRow row) {
+    flDate    = row.getString("FL_DATE");
+    carrier   = row.getString("MKT_CARRIER");
+    origin    = row.getString("ORIGIN");
+    dest      = row.getString("DEST");
+    depTime   = row.getString("DEP_TIME");
+    arrTime   = row.getString("ARR_TIME");
+    cancelled = row.getInt("CANCELLED");
+    diverted  = row.getInt("DIVERTED");
+    distance  = row.getInt("DISTANCE");
   }
 
-  void display(float x, float y) {
-    text(origin + "   " + dest + "   " + distance, x, y);
-  }
-
-  String toString() {
-    return origin + "   " + dest + "   " + distance;
-  }
+  boolean isCancelled() { return cancelled == 1; }
+  boolean isDiverted()  { return diverted  == 1; }
+  String  getOrigin()   { return origin; }
+  String  getDest()     { return dest; }
+  int     getDistance() { return distance; }
 }
