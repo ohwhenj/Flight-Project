@@ -1,52 +1,38 @@
-<<<<<<< HEAD
 // Week 3 - Owen - Integrated heatmap + query search into graphs page of sketch produced by Roy
 
 StateHeatMap heatMap;
 StateQueryChart stateChart;
 
-=======
->>>>>>> origin/main
 int screen = 0;
 
 Button flightsBtn;
 Button graphBtn;
 Button SearchBtn;
 Button backBtn;
-<<<<<<< HEAD
+
 Button heatMapBtn;
 Button stateQueryBtn;
-=======
->>>>>>> origin/main
+
 
 Background plane;
 FlightForm flightForm;
 
 void setup() {
   size(1000, 650);
-<<<<<<< HEAD
   
   heatMap = new StateHeatMap("usa-wikipedia.svg", "flights2k.csv", -250, -110);
-=======
->>>>>>> origin/main
 
   flightsBtn = new Button(425, 150, 200, 50, "Flights");
   graphBtn   = new Button(425, 250, 200, 50, "Graphs");
   SearchBtn   = new Button(425, 350, 200, 50, "Search");
   backBtn    = new Button(20, 20, 100, 40, "Back");
-<<<<<<< HEAD
   heatMapBtn = new Button(40, 150, 220, 60, "Heat Map");
   stateQueryBtn = new Button(40, 250, 220, 60, "State Query Chart");
-
-=======
->>>>>>> origin/main
 
   plane = new Background();
 
   flightForm = new FlightForm("flights2k.csv", 120, 120, 760, 420);
-<<<<<<< HEAD
   stateChart = new StateQueryChart("flights2k.csv");
-=======
->>>>>>> origin/main
 }
 
 void draw() {
@@ -67,15 +53,13 @@ void draw() {
   else if (screen == 3){
     drawSearch();
   }
-<<<<<<< HEAD
+
     else if (screen == 4){
     drawHeatMapPage();
   }
   else if (screen == 5) {
   drawStateQueryPage();
 }
-=======
->>>>>>> origin/main
 }
 
 void drawMenu() {
@@ -106,7 +90,7 @@ void drawGraphs() {
   textAlign(CENTER, CENTER);
   textSize(28);
   text("Graphs Page", width/2, height/2);
-<<<<<<< HEAD
+
   
   fill(40);
   textAlign(CENTER, CENTER);
@@ -125,9 +109,7 @@ void drawHeatMapPage() {
 
 void drawStateQueryPage() {
   stateChart.display();
-=======
 
->>>>>>> origin/main
   backBtn.display();
 }
 
@@ -147,7 +129,7 @@ void mousePressed() {
     if (graphBtn.isClicked()) screen = 2;
     if (SearchBtn.isClicked()) screen = 3;
   }
-<<<<<<< HEAD
+
     else if (screen == 2) {
     if (heatMapBtn.isClicked()) screen = 4;
     if (stateQueryBtn.isClicked()) screen = 5;
@@ -164,10 +146,7 @@ void mousePressed() {
     if (backBtn.isClicked()) screen = 2;
   }
   if (screen == 1 || screen == 3) {
-=======
 
-  if (screen == 1 || screen == 2 || screen == 3) {
->>>>>>> origin/main
     if (backBtn.isClicked()) screen = 0;
   }
 
@@ -195,12 +174,10 @@ void keyPressed() {
     if (keyCode == UP)    flightForm.scrollY -= 20;
     if (keyCode == DOWN)  flightForm.scrollY += 20;
   }
-<<<<<<< HEAD
     else if (screen == 5) {
     stateChart.keyPressed();
   }
-=======
->>>>>>> origin/main
+
 }
 
 void mouseWheel(processing.event.MouseEvent event) {
