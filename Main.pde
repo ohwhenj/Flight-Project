@@ -27,7 +27,6 @@ void setup() {
 
   plane = new Background();
 
-  // ✅ ONLY ONE LINE NEEDED
   flightForm = new FlightForm("flights2k.csv");
 
   stateChart = new StateQueryChart("flights2k.csv");
@@ -68,7 +67,7 @@ void drawMenu() {
 
 void drawFlights() {
   backBtn.display();
-  flightForm.display(); // ✅ everything handled inside
+  flightForm.display(); 
 }
 
 void drawGraphs() {
@@ -91,8 +90,6 @@ void drawStateQueryPage() {
   stateChart.display();
   backBtn.display();
 }
-
-// 🎮 INPUT FORWARDING
 
 void mousePressed() {
   if (screen == 0) {
