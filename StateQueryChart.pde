@@ -21,8 +21,7 @@ class StateQueryChart {
   }
 
   void display() {
-    background(245);
-
+    
     drawTitle();
     drawInputBox();
     drawInstructions();
