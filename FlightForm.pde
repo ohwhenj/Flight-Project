@@ -1,202 +1,249 @@
 class FlightForm {
-  Table table;
 
-  float x, y, w, h;
-  float rowHeight = 32;
-  float colWidth = 140;
-  float headerHeight = 36;
-  float scrollSize = 16;
+  ArrayList<String[]> flights = new ArrayList<String[]>();
 
-  float scrollX = 0;
-  float scrollY = 0;
+  boolean showDep = true;
+  String query = "";
+  boolean searchActive = false;
+  int scrollRow = 0;
+  final int ROWS = 12;
 
-  boolean draggingH = false;
-  boolean draggingV = false;
+  final int BTN_Y = 30, BTN_H = 40, BTN_W = 180;
+  int depBtnX, arrBtnX;
 
-  float hKnobX, hKnobW;
-  float vKnobY, vKnobH;
+  final int SY = 90, SH = 35;
+  final int TX = 40, TY = 150, TW = width - 80;
+  final int RH = 35;
 
-  FlightForm(String filename, float x, float y, float w, float h) {
-    this.x = x;
-    this.y = y;
-    this.w = w;
-    this.h = h;
+  int[] COL;
 
-    table = loadTable(filename, "header");
+  final int BG = color(0);
+  final int WHITE = color(255);
+  final int GREY = color(150);
+  final int GREEN = color(0, 210, 85);
+  final int ORANGE = color(255, 138, 0);
+  final int RED = color(255, 55, 55);
+
+  FlightForm(String filename) {
+
+    depBtnX = width/2 - BTN_W - 10;
+    arrBtnX = width/2 + 10;
+
+    COL = new int[]{TX+20, TX+120, TX+220, TX+320, TX+520, TX+650, TX+770};
+    loadCSV(filename);
+  }
+  
+  String[] parseCSVLine(String line) {
+    ArrayList<String> fields = new ArrayList<String>();
+    boolean inQuotes = false;
+    String current = "";
+
+    for (int i = 0; i < line.length(); i++) {
+      char ch = line.charAt(i);
+
+      if (ch == '"') {
+        inQuotes = !inQuotes;
+      } 
+      else if (ch == ',' && !inQuotes) {
+        fields.add(current.trim());
+        current = "";
+      } 
+      else {
+        current += ch;
+      }
+    }
+
+    fields.add(current.trim());
+    return fields.toArray(new String[0]);
   }
 
-  void display() {
-    updateKnobs();
+  void loadCSV(String filename) {
+    String[] lines = loadStrings(filename);
+    if (lines == null) return;
 
-    fill(255);
-    stroke(180);
-    rect(x, y, w, h, 8);
+    for (int i = 1; i < lines.length; i++) {
 
-    float viewW = w - scrollSize;
-    float viewH = h - scrollSize;
+      String[] c = parseCSVLine(lines[i]); // ✅ FIXED
 
-    pushMatrix();
-    clip((int)x, (int)y, (int)viewW, (int)viewH);
+      if (c.length < 16) continue;
 
-    fill(250);
-    noStroke();
-    rect(x, y, viewW, viewH);
+      int cancelled = 0;
+      try {
+        cancelled = Integer.parseInt(trim(c[15]));
+      } catch (Exception e) {}
 
-    drawHeader();
-    drawRows();
-
-    noClip();
-    popMatrix();
-
-    drawScrollBars();
-  }
-
-  void drawHeader() {
-    String[] headers = table.getColumnTitles();
-
-    fill(60, 120, 200);
-    stroke(220);
-    rect(x, y, totalTableWidth(), headerHeight);
-
-    for (int c = 0; c < headers.length; c++) {
-      float cellX = x + c * colWidth - scrollX;
-
-      fill(60, 120, 200);
-      stroke(220);
-      rect(cellX, y, colWidth, headerHeight);
-
-      fill(255);
-      textAlign(CENTER, CENTER);
-      textSize(14);
-      text(headers[c], cellX + colWidth/2, y + headerHeight/2);
+      flights.add(new String[]{
+        trim(c[1]) + trim(c[2]),
+        trim(c[3]), city(trim(c[4])),
+        trim(c[7]), city(trim(c[8])),
+        fmt(trim(c[11])), fmt(trim(c[12])),
+        fmt(trim(c[13])), fmt(trim(c[14])),
+        st(trim(c[12]), trim(c[11]), cancelled),
+        st(trim(c[14]), trim(c[13]), cancelled)
+      });
     }
   }
 
-  void drawRows() {
-    String[] headers = table.getColumnTitles();
+  String city(String s) {
+    int i = s.indexOf(',');
+    return i > 0 ? s.substring(0, i) : s;
+  }
 
-    for (int r = 0; r < table.getRowCount(); r++) {
-      TableRow row = table.getRow(r);
-      float rowY = y + headerHeight + r * rowHeight - scrollY;
+  String fmt(String raw) {
+    if (raw == null || raw.equals("")) return "--:--";
 
-      if (rowY + rowHeight < y || rowY > y + h - scrollSize) continue;
+    try {
+      int t = Integer.parseInt(raw);
+      return nf(t/100,2) + ":" + nf(t%100,2);
+    } catch (Exception e) {
+      return "--:--";
+    }
+  }
 
-      for (int c = 0; c < headers.length; c++) {
-        float cellX = x + c * colWidth - scrollX;
+  String st(String actual, String sched, int cancelled) {
 
-        if (r % 2 == 0) fill(245);
-        else fill(230);
+    if (cancelled == 1) return "CANCELLED";
+    if (actual == null || actual.equals("")) return "---";
+    if (sched == null || sched.equals("")) return "---";
 
-        stroke(200);
-        rect(cellX, rowY, colWidth, rowHeight);
+    try {
+      int a = Integer.parseInt(actual);
+      int s = Integer.parseInt(sched);
 
-        fill(30);
-        textAlign(CENTER, CENTER);
-        textSize(13);
-        text(row.getString(headers[c]), cellX + colWidth/2, rowY + rowHeight/2);
+      int diff = a - s;
+
+      if (diff < -500) diff += 2400;
+      if (diff > 500) diff -= 2400;
+
+      return diff > 15 ? "DELAYED" : "ON TIME";
+
+    } catch (Exception e) {
+      return "---";
+    }
+  }
+
+ArrayList<String[]> filtered() {
+  ArrayList<String[]> out = new ArrayList<String[]>();
+
+  String q = query.toLowerCase().trim();
+
+  for (String[] f : flights) {
+
+    if (q.equals("")) {
+      out.add(f);
+      continue;
+    }
+
+    if (showDep) {
+      if (f[1].toLowerCase().contains(q) ||
+          f[2].toLowerCase().contains(q)) {
+        out.add(f);
+      }
+    } else {
+      if (f[3].toLowerCase().contains(q) ||
+          f[4].toLowerCase().contains(q)) {
+        out.add(f);
       }
     }
   }
 
-  void drawScrollBars() {
-    float viewW = w - scrollSize;
-    float viewH = h - scrollSize;
+  return out;
+}
 
-    fill(220);
-    noStroke();
-    rect(x, y + viewH, viewW, scrollSize);
+  void display() {
 
-    fill(120);
-    rect(hKnobX, y + viewH, hKnobW, scrollSize, 6);
+  ArrayList<String[]> data = filtered();
 
-    fill(220);
-    rect(x + viewW, y, scrollSize, viewH);
+  drawToggle();
+  drawSearch();
+  drawTable(data);
+}
 
-    fill(120);
-    rect(x + viewW, vKnobY, scrollSize, vKnobH, 6);
+  void drawToggle() {
+    textAlign(CENTER, CENTER);
 
-    fill(200);
-    rect(x + viewW, y + viewH, scrollSize, scrollSize);
+    fill(showDep ? WHITE : BG);
+    rect(depBtnX, BTN_Y, BTN_W, BTN_H);
+    fill(showDep ? BG : WHITE);
+    text("DEPARTURES", depBtnX + BTN_W/2, BTN_Y + BTN_H/2);
+
+    fill(!showDep ? WHITE : BG);
+    rect(arrBtnX, BTN_Y, BTN_W, BTN_H);
+    fill(!showDep ? BG : WHITE);
+    text("ARRIVALS", arrBtnX + BTN_W/2, BTN_Y + BTN_H/2);
   }
 
-  void updateKnobs() {
-    float viewW = w - scrollSize;
-    float viewH = h - scrollSize;
+  void drawSearch() {
+  stroke(WHITE);     
+  fill(BG);         
+  rect(TX, SY, TW, SH);
 
-    float contentW = totalTableWidth();
-    float contentH = totalTableHeight();
+  fill(WHITE);  
+  textAlign(LEFT, CENTER);
+  text("SEARCH: " + query, TX + 10, SY + SH/2);
+}
 
-    float maxScrollX = max(0, contentW - viewW);
-    float maxScrollY = max(0, contentH - viewH);
+  void drawTable(ArrayList<String[]> data) {
 
-    scrollX = constrain(scrollX, 0, maxScrollX);
-    scrollY = constrain(scrollY, 0, maxScrollY);
+    String[] headers = { "FLIGHT", "FROM", "TO", "CITY", "SCHED", "ACTUAL", "STATUS" };
 
-    if (contentW <= viewW) {
-      hKnobX = x;
-      hKnobW = viewW;
-    } else {
-      hKnobW = max(40, viewW * (viewW / contentW));
-      hKnobX = x + (scrollX / maxScrollX) * (viewW - hKnobW);
+    fill(WHITE);
+    for (int i = 0; i < headers.length; i++) {
+      text(headers[i], COL[i], TY - 10);
     }
 
-    if (contentH <= viewH) {
-      vKnobY = y;
-      vKnobH = viewH;
-    } else {
-      vKnobH = max(40, viewH * (viewH / contentH));
-      vKnobY = y + (scrollY / maxScrollY) * (viewH - vKnobH);
+    int start = scrollRow;
+    int end = min(start + ROWS, data.size());
+
+    for (int i = start; i < end; i++) {
+      String[] f = data.get(i);
+      int y = TY + (i - start) * RH;
+
+      fill(i % 2 == 0 ? 20 : 0);
+      rect(TX, y, TW, RH);
+
+      fill(WHITE);
+      text(f[0], COL[0], y + 20);
+      text(f[1], COL[1], y + 20);
+      text(f[3], COL[2], y + 20);
+      text(f[4], COL[3], y + 20);
+      text(f[5], COL[4], y + 20);
+      text(f[6], COL[5], y + 20);
+
+      if (f[9].equals("ON TIME")) fill(GREEN);
+      else if (f[9].equals("DELAYED")) fill(ORANGE);
+      else fill(RED);
+
+      text(f[9], COL[6], y + 20);
     }
-  }
-
-  float totalTableWidth() {
-    return table.getColumnCount() * colWidth;
-  }
-
-  float totalTableHeight() {
-    return headerHeight + table.getRowCount() * rowHeight;
   }
 
   void mousePressed() {
-    float viewW = w - scrollSize;
-    float viewH = h - scrollSize;
 
-    if (mouseX >= hKnobX && mouseX <= hKnobX + hKnobW &&
-        mouseY >= y + viewH && mouseY <= y + viewH + scrollSize) {
-      draggingH = true;
+    if (mouseY >= BTN_Y && mouseY <= BTN_Y + BTN_H) {
+      if (mouseX >= depBtnX && mouseX <= depBtnX + BTN_W) showDep = true;
+      if (mouseX >= arrBtnX && mouseX <= arrBtnX + BTN_W) showDep = false;
     }
 
-    if (mouseX >= x + viewW && mouseX <= x + viewW + scrollSize &&
-        mouseY >= vKnobY && mouseY <= vKnobY + vKnobH) {
-      draggingV = true;
-    }
+    searchActive = mouseY >= SY && mouseY <= SY + SH;
   }
 
-  void mouseDragged() {
-    float viewW = w - scrollSize;
-    float viewH = h - scrollSize;
+  void mouseWheel(float e) {
+    ArrayList<String[]> data = filtered();
 
-    float contentW = totalTableWidth();
-    float contentH = totalTableHeight();
-
-    float maxScrollX = max(0, contentW - viewW);
-    float maxScrollY = max(0, contentH - viewH);
-
-    if (draggingH && contentW > viewW) {
-      float barRange = viewW - hKnobW;
-      float newKnobX = constrain(mouseX - hKnobW/2, x, x + barRange);
-      scrollX = map(newKnobX, x, x + barRange, 0, maxScrollX);
-    }
-
-    if (draggingV && contentH > viewH) {
-      float barRange = viewH - vKnobH;
-      float newKnobY = constrain(mouseY - vKnobH/2, y, y + barRange);
-      scrollY = map(newKnobY, y, y + barRange, 0, maxScrollY);
-    }
+    scrollRow += (e > 0 ? 1 : -1);
+    scrollRow = constrain(scrollRow, 0, max(0, data.size() - ROWS));
   }
 
-  void mouseReleased() {
-    draggingH = false;
-    draggingV = false;
+  void keyPressed() {
+    if (!searchActive) return;
+
+    if (key == BACKSPACE && query.length() > 0)
+      query = query.substring(0, query.length()-1);
+    else if (key >= 32 && key <= 126)
+      query += key;
   }
+
+  void mouseDragged() {}
+  void mouseReleased() {}
 }
