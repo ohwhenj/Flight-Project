@@ -1,3 +1,4 @@
+
 import java.util.HashMap;
 
 class StateHeatMap {
@@ -36,7 +37,7 @@ class StateHeatMap {
   }
 
   void display() {
-    background(255);
+
 
     drawButtons();
     drawTitle();
