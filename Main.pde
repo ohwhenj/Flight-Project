@@ -2,10 +2,16 @@ StateHeatMap heatMap;
 StateQueryChart stateChart;
 
 int screen = 0;
-
+Table table;
+ArrayList<Flight> flights;
+BarChart barChart;
 Button flightsBtn;
 Button graphBtn;
 Button backBtn;
+
+Button barChartBtn;
+Button barChart2Btn;
+Button barChart3Btn;
 
 Button heatMapBtn;
 Button stateQueryBtn;
@@ -13,17 +19,25 @@ Button stateQueryBtn;
 Background plane;
 FlightForm flightForm;
 
+//setup for the game
 void setup() {
   size(1000, 650);
-
+  
+  flights = new ArrayList<Flight>();
+  loadData();
+  barChart = new BarChart(flights);
+  
   heatMap = new StateHeatMap("usa-wikipedia.svg", "flights2k.csv", -250, -110);
 
   flightsBtn = new Button(425, 250, 200, 50, "Flight Boards");
-  graphBtn   = new Button(425, 400, 200, 50, "Graphs");
-  backBtn    = new Button(20, 20, 100, 40, "Back");
-
-  heatMapBtn = new Button(390, 220, 220, 60, "Heat Map");
-  stateQueryBtn = new Button(390, 320, 220, 60, "State Query Chart");
+  graphBtn = new Button(425, 400, 200, 50, "Graphs");
+  backBtn = new Button(20, 20, 100, 40, "Back");
+  
+  barChartBtn = new Button(50, 70, 150, 50, "Bar Chart");
+  barChart2Btn = new Button(240, 70, 150, 50, "Bar Chart");
+  barChart3Btn = new Button(430, 70, 150, 50, "Bar Chart");
+  heatMapBtn = new Button(620, 70, 150, 50, "Heat Map");
+  stateQueryBtn = new Button(800, 70, 180, 50, "State Query Chart");
 
   plane = new Background();
 
@@ -32,6 +46,7 @@ void setup() {
   stateChart = new StateQueryChart("flights2k.csv");
 }
 
+//draw different things
 void draw() {
   background(90, 160, 90);
 
@@ -52,6 +67,15 @@ void draw() {
   }
   else if (screen == 4) {
     drawStateQueryPage();
+  }
+  else if (screen == 5) {
+    drawBarChartPage();
+  }
+  else if (screen == 6) {
+    drawBarChartPage2();
+  }
+  else if (screen == 7) {
+    drawBarChartPage3();
   }
 }
 
@@ -74,12 +98,29 @@ void drawGraphs() {
   textAlign(CENTER, CENTER);
   textSize(24);
   fill(40);
-  text("Traffic Visualisations", 495, 100);
-
+  text("Traffic Visualisations", 495, 50);
+  
+  barChartBtn.display();
+  barChart2Btn.display();
+  barChart3Btn.display();
   heatMapBtn.display();
   stateQueryBtn.display();
   backBtn.display();
 }
+
+void drawBarChartPage() {
+  barChart.display();
+  backBtn.display();
+}
+
+void drawBarChartPage2() {
+  backBtn.display();
+}
+
+void drawBarChartPage3() {
+  backBtn.display();
+}
+
 
 void drawHeatMapPage() {
   heatMap.display();
@@ -91,7 +132,15 @@ void drawStateQueryPage() {
   backBtn.display();
 }
 
+//load data from csv file
+void loadData() {
+  table = loadTable("flights2k.csv", "header");
+  for (TableRow row : table.rows()) {
+    flights.add(new Flight(row));
+  }
+}
 
+//make sure can click the buttons
 void mousePressed() {
   if (screen == 0) {
     if (flightsBtn.isClicked()) screen = 1;
@@ -99,10 +148,16 @@ void mousePressed() {
   }
 
   else if (screen == 2) {
-    if (heatMapBtn.isClicked()) screen = 3;
-    if (stateQueryBtn.isClicked()) screen = 4;
-    if (backBtn.isClicked()) screen = 0;
-  }
+
+  if (barChartBtn.isClicked()) screen = 5;
+  if (barChart2Btn.isClicked()) screen = 6;
+  if (barChart3Btn.isClicked()) screen = 7;
+
+  if (heatMapBtn.isClicked()) screen = 3;
+  if (stateQueryBtn.isClicked()) screen = 4;
+
+  if (backBtn.isClicked()) screen = 0;
+}
 
   else if (screen == 3) {
     heatMap.mousePressed();
@@ -112,6 +167,10 @@ void mousePressed() {
   else if (screen == 4) {
     if (backBtn.isClicked()) screen = 2;
   }
+  
+  else if (screen == 5 || screen == 6 || screen == 7) {
+    if (backBtn.isClicked()) screen = 2;
+  }
 
   if (screen == 1) {
     if (backBtn.isClicked()) screen = 0;
@@ -119,19 +178,23 @@ void mousePressed() {
   }
 }
 
+//make form can scroll down
 void mouseDragged() {
   if (screen == 1) flightForm.mouseDragged();
 }
 
+// make form won't autometic scroll up
 void mouseReleased() {
   if (screen == 1) flightForm.mouseReleased();
 }
 
+//for texting
 void keyPressed() {
   if (screen == 1) flightForm.keyPressed();
   else if (screen == 4) stateChart.keyPressed();
 }
 
+//for Searching bar
 void mouseWheel(processing.event.MouseEvent event) {
   if (screen == 1) {
     flightForm.mouseWheel(event.getCount());
