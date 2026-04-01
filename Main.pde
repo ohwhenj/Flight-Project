@@ -19,6 +19,7 @@ Button stateQueryBtn;
 Background plane;
 FlightForm flightForm;
 
+//setup for the game
 void setup() {
   size(1000, 650);
   
@@ -45,6 +46,7 @@ void setup() {
   stateChart = new StateQueryChart("flights2k.csv");
 }
 
+//draw different things
 void draw() {
   background(90, 160, 90);
 
@@ -130,6 +132,7 @@ void drawStateQueryPage() {
   backBtn.display();
 }
 
+//load data from csv file
 void loadData() {
   table = loadTable("flights2k.csv", "header");
   for (TableRow row : table.rows()) {
@@ -137,6 +140,7 @@ void loadData() {
   }
 }
 
+//make sure can click the buttons
 void mousePressed() {
   if (screen == 0) {
     if (flightsBtn.isClicked()) screen = 1;
@@ -174,20 +178,23 @@ void mousePressed() {
   }
 }
 
+//make form can scroll down
 void mouseDragged() {
   if (screen == 1) flightForm.mouseDragged();
 }
 
+// make form won't autometic scroll up
 void mouseReleased() {
   if (screen == 1) flightForm.mouseReleased();
 }
 
+//for texting
 void keyPressed() {
   if (screen == 1) flightForm.keyPressed();
   else if (screen == 4) stateChart.keyPressed();
 }
 
-///for Searching bar
+//for Searching bar
 void mouseWheel(processing.event.MouseEvent event) {
   if (screen == 1) {
     flightForm.mouseWheel(event.getCount());
