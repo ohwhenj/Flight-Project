@@ -1,3 +1,4 @@
+///The FlightForm have Search bar
 class FlightForm {
 
   ArrayList<String[]> flights = new ArrayList<String[]>();
