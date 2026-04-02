@@ -19,6 +19,10 @@ Button stateQueryBtn;
 Background plane;
 FlightForm flightForm;
 
+BoardingGateWall boardingGateWall;
+Button boardingGateBtn;
+
+
 void setup() {
   size(1000, 650);
 
@@ -33,6 +37,9 @@ void setup() {
 
   heatMapBtn = new Button(40, 150, 220, 60, "Heat Map");
   stateQueryBtn = new Button(40, 250, 220, 60, "State Query Chart");
+  
+  boardingGateBtn = new Button(40, 350, 220, 60, "Boarding Gate Wall");
+
 
 
   plane = new Background();
@@ -40,6 +47,10 @@ void setup() {
   flightForm = new FlightForm("flights2k.csv", 120, 120, 760, 420);
 
   stateChart = new StateQueryChart("flights2k.csv");
+
+  
+  boardingGateWall = new BoardingGateWall("flights2k.csv");
+
 
 }
 
@@ -68,6 +79,12 @@ void draw() {
   else if (screen == 5) {
   drawStateQueryPage();
 }
+
+else if (screen == 6) {
+  drawBoardingGatePage();
+}
+
+
 }
 
 void drawMenu() {
@@ -99,6 +116,8 @@ void drawGraphs() {
   textSize(28);
   text("Graphs Page", width/2, height/2);
 
+
+
   fill(40);
   textAlign(CENTER, CENTER);
   textSize(24);
@@ -107,6 +126,8 @@ void drawGraphs() {
   heatMapBtn.display();
   stateQueryBtn.display();
   backBtn.display();
+  boardingGateBtn.display();
+
 }
 
 void drawHeatMapPage() {
@@ -117,6 +138,13 @@ void drawHeatMapPage() {
 void drawStateQueryPage() {
   stateChart.display();
 
+
+
+  backBtn.display();
+}
+
+void drawBoardingGatePage() {
+  boardingGateWall.display();
 
   backBtn.display();
 }
@@ -142,6 +170,7 @@ void mousePressed() {
     if (heatMapBtn.isClicked()) screen = 4;
     if (stateQueryBtn.isClicked()) screen = 5;
     if (backBtn.isClicked()) screen = 0;
+    if (boardingGateBtn.isClicked()) screen = 6;
   }
    else if (screen == 4) {
     heatMap.mousePressed();
@@ -153,6 +182,16 @@ void mousePressed() {
      else if (screen == 5) {
     if (backBtn.isClicked()) screen = 2;
   }
+
+    else if (screen == 6) {
+    boardingGateWall.mousePressed();
+
+    if (backBtn.isClicked()) {
+      screen = 2;
+    }
+  }
+  
+
   if (screen == 1 || screen == 3) {
     if (backBtn.isClicked()) screen = 0;
   }
@@ -160,6 +199,10 @@ void mousePressed() {
   if (screen == 1) {
     flightForm.mousePressed();
   }
+  
+  else if (screen == 6) {
+  drawBoardingGatePage();
+}
 }
 
 void mouseDragged() {
@@ -198,4 +241,7 @@ void mouseWheel(processing.event.MouseEvent event) {
       flightForm.scrollY += e * 20; 
     }
   }
+  else if (screen == 6) {
+  boardingGateWall.mouseWheel(e);
+}
 }
