@@ -4,17 +4,22 @@ StateQueryChart stateChart;
 int screen = 0;
 Table table;
 ArrayList<Flight> flights;
+PImage airplane;
 BarChart barChart;
+LeaderBoard leaderBoard;
 Button flightsBtn;
 Button graphBtn;
 Button backBtn;
 
 Button barChartBtn;
 Button barChart2Btn;
-Button barChart3Btn;
 
 Button heatMapBtn;
 Button stateQueryBtn;
+
+BoardingGateWall boardingGateWall;
+Button boardingGateBtn;
+
 
 Background plane;
 FlightForm flightForm;
@@ -22,27 +27,29 @@ FlightForm flightForm;
 //setup for the game
 void setup() {
   size(1000, 650);
-  
+  airplane = loadImage("airplane.png");
   flights = new ArrayList<Flight>();
   loadData();
   barChart = new BarChart(flights);
+  leaderBoard = new LeaderBoard();
   
   heatMap = new StateHeatMap("usa-wikipedia.svg", "flights2k.csv", -250, -110);
 
-  flightsBtn = new Button(425, 250, 200, 50, "Flight Boards");
-  graphBtn = new Button(425, 400, 200, 50, "Graphs");
+
+  flightsBtn = new Button(425, 250, 180, 45, "Flight Boards");
+  graphBtn = new Button(425, 400, 180, 45, "Graphs");
   backBtn = new Button(20, 20, 100, 40, "Back");
   
-  barChartBtn = new Button(50, 70, 150, 50, "Bar Chart");
-  barChart2Btn = new Button(240, 70, 150, 50, "Bar Chart");
-  barChart3Btn = new Button(430, 70, 150, 50, "Bar Chart");
-  heatMapBtn = new Button(620, 70, 150, 50, "Heat Map");
-  stateQueryBtn = new Button(800, 70, 180, 50, "State Query Chart");
+  barChartBtn = new Button(40, 90, 150, 50, "Bar Chart");
+  barChart2Btn = new Button(220, 90, 150, 50, "Leader board");
+  heatMapBtn = new Button(610, 90, 150, 50, "Heat Map");
+  stateQueryBtn = new Button(790, 90, 180, 50, "State Query Chart");
+  boardingGateBtn = new Button(400, 90, 180, 50, "Boarding Gate Wall");
 
   plane = new Background();
 
   flightForm = new FlightForm("flights2k.csv");
-
+  boardingGateWall = new BoardingGateWall("flights2k.csv");
   stateChart = new StateQueryChart("flights2k.csv");
 }
 
@@ -75,8 +82,8 @@ void draw() {
     drawBarChartPage2();
   }
   else if (screen == 7) {
-    drawBarChartPage3();
-  }
+  drawBoardingGatePage();
+}
 }
 
 void drawMenu() {
@@ -94,18 +101,24 @@ void drawFlights() {
   flightForm.display(); 
 }
 
+void drawBoardingGatePage() {
+  boardingGateWall.display();
+  backBtn.display();
+}
+
 void drawGraphs() {
   textAlign(CENTER, CENTER);
   textSize(24);
   fill(40);
-  text("Traffic Visualisations", 495, 50);
+  text("Traffic Visualisations", 495, 45);
+  image(airplane, 180, 200);
   
   barChartBtn.display();
   barChart2Btn.display();
-  barChart3Btn.display();
   heatMapBtn.display();
   stateQueryBtn.display();
   backBtn.display();
+  boardingGateBtn.display();
 }
 
 void drawBarChartPage() {
@@ -114,13 +127,9 @@ void drawBarChartPage() {
 }
 
 void drawBarChartPage2() {
+  leaderBoard.display();
   backBtn.display();
 }
-
-void drawBarChartPage3() {
-  backBtn.display();
-}
-
 
 void drawHeatMapPage() {
   heatMap.display();
@@ -151,10 +160,9 @@ void mousePressed() {
 
   if (barChartBtn.isClicked()) screen = 5;
   if (barChart2Btn.isClicked()) screen = 6;
-  if (barChart3Btn.isClicked()) screen = 7;
-
   if (heatMapBtn.isClicked()) screen = 3;
   if (stateQueryBtn.isClicked()) screen = 4;
+  if (boardingGateBtn.isClicked()) screen = 7;
 
   if (backBtn.isClicked()) screen = 0;
 }
@@ -164,11 +172,7 @@ void mousePressed() {
     if (backBtn.isClicked()) screen = 2;
   }
 
-  else if (screen == 4) {
-    if (backBtn.isClicked()) screen = 2;
-  }
-  
-  else if (screen == 5 || screen == 6 || screen == 7) {
+  else if (screen == 4 || screen == 5 || screen == 6 || screen == 7) {
     if (backBtn.isClicked()) screen = 2;
   }
 
@@ -176,6 +180,9 @@ void mousePressed() {
     if (backBtn.isClicked()) screen = 0;
     flightForm.mousePressed();
   }
+  else if (screen == 7) {
+  drawBoardingGatePage();
+}
 }
 
 //make form can scroll down
@@ -196,7 +203,11 @@ void keyPressed() {
 
 //for Searching bar
 void mouseWheel(processing.event.MouseEvent event) {
+  float e = event.getCount();
   if (screen == 1) {
     flightForm.mouseWheel(event.getCount());
   }
+  else if (screen == 7) {
+  boardingGateWall.mouseWheel(e);
+}
 }
