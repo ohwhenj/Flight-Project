@@ -1,6 +1,5 @@
 class BarChart {
   ArrayList<Flight> flights;
-
   float marginLeft   = 120;
   float marginRight  = 80;
   float marginTop    = 80;
@@ -72,7 +71,9 @@ class BarChart {
   }
 
   void display() {
-    rect(90, 65, 850, 580);
+    background(10, 22, 40);
+    fill(255);
+    rect(50, 60, 900, 578);
     int   n      = labels.length;
     float chartW = width  - marginLeft - marginRight;
     float chartH = height - marginTop  - marginBottom;
@@ -81,14 +82,14 @@ class BarChart {
     for (int v : values) if (v > maxVal) maxVal = v;
 
     // Title
-    fill(30);
+    fill(250);
     textSize(20);
     textAlign(CENTER, TOP);
     text("Number of Flights per Day", width / 2, 15);
 
     // Y axis label
     pushMatrix();
-    translate(15, height / 2);
+    translate(75, height / 2);
     rotate(-HALF_PI);
     textSize(13);
     textAlign(CENTER, CENTER);
