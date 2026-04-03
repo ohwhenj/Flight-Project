@@ -21,8 +21,7 @@ class GatePanel {
   }
 
 void display(boolean selected) {
-  boolean hovered = isMouseOver();
-
+boolean hovered = isMouseOver(scrollY);
   // outer card
   stroke(selected ? color(120, 170, 255) : color(70, 85, 105));
   strokeWeight(selected ? 2.5 : 1);
@@ -90,8 +89,10 @@ void display(boolean selected) {
   text("NET  " + net, x + 12, y + 120);
 }
 
-  boolean isMouseOver() {
-    return mouseX >= x && mouseX <= x + w &&
-           mouseY >= y && mouseY <= y + h;
-  }
+  boolean isMouseOver(float scrollY) {
+  float adjustedMouseY = mouseY - scrollY;
+
+  return mouseX >= x && mouseX <= x + w &&
+         adjustedMouseY >= y && adjustedMouseY <= y + h;
+}
 }
