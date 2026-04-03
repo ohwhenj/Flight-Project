@@ -169,9 +169,12 @@ void drawBottomBar() {
 }
 
 void mousePressed() {
+  float adjustedMouseY = mouseY - scrollY;   
+
   for (GatePanel panel : panels) {
     if (mouseX >= panel.x && mouseX <= panel.x + panel.w &&
-        mouseY >= panel.y + scrollY && mouseY <= panel.y + panel.h + scrollY) {
+        adjustedMouseY >= panel.y && adjustedMouseY <= panel.y + panel.h) {
+
       selectedState = panel.stateCode;
     }
   }
