@@ -12,7 +12,7 @@ class StateQueryChart {
   boolean invalidInput = false;
 
   float inputX = 350;
-  float inputY = 80;
+  float inputY = 120;
   float inputW = 300;
   float inputH = 50;
 
@@ -21,7 +21,9 @@ class StateQueryChart {
   }
 
   void display() {
-    
+    background(10, 22, 40);
+    fill(255);
+    rect(100, 50, 810, 560);
     drawTitle();
     drawInputBox();
     drawInstructions();
@@ -40,7 +42,7 @@ class StateQueryChart {
     fill(20);
     textAlign(CENTER, CENTER);
     textSize(28);
-    text("State Flight Query", width/2, 40);
+    text("State Flight Query", width/2, 80);
   }
 
   void drawInputBox() {
@@ -63,14 +65,14 @@ class StateQueryChart {
     fill(70);
     textAlign(CENTER, CENTER);
     textSize(16);
-    text("Type a 2-letter state code (example: CA, TX, NY) and press ENTER", width/2, 155);
+    text("Type a 2-letter state code (example: CA, TX, NY) and press ENTER", width/2, 195);
   }
 
   void drawInvalidMessage() {
     fill(200, 50, 50);
     textAlign(CENTER, CENTER);
     textSize(16);
-    text("Please enter a valid 2-letter state code.", width/2, 185);
+    text("Please enter a valid 2-letter state code.", width/2, 225);
   }
 
   void drawResults() {
