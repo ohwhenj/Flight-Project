@@ -151,38 +151,43 @@ void loadData() {
 
 //make sure can click the buttons
 void mousePressed() {
+
   if (screen == 0) {
     if (flightsBtn.isClicked()) screen = 1;
-    if (graphBtn.isClicked()) screen = 2;
+    else if (graphBtn.isClicked()) screen = 2;
   }
 
   else if (screen == 2) {
-
-  if (barChartBtn.isClicked()) screen = 5;
-  if (barChart2Btn.isClicked()) screen = 6;
-  if (heatMapBtn.isClicked()) screen = 3;
-  if (stateQueryBtn.isClicked()) screen = 4;
-  if (boardingGateBtn.isClicked()) screen = 7;
-
-  if (backBtn.isClicked()) screen = 0;
-}
+    if (barChartBtn.isClicked()) screen = 5;
+    else if (barChart2Btn.isClicked()) screen = 6;
+    else if (heatMapBtn.isClicked()) screen = 3;
+    else if (stateQueryBtn.isClicked()) screen = 4;
+    else if (boardingGateBtn.isClicked()) screen = 7;
+    else if (backBtn.isClicked()) screen = 0;
+  }
 
   else if (screen == 3) {
     heatMap.mousePressed();
     if (backBtn.isClicked()) screen = 2;
   }
+  else if (screen == 7) {  
+  boardingGateWall.mousePressed();  
+  if (backBtn.isClicked()) screen = 2;
+}
 
-  else if (screen == 4 || screen == 5 || screen == 6 || screen == 7) {
+  else if (screen == 6) {   
+    leaderBoard.mousePressed(); 
     if (backBtn.isClicked()) screen = 2;
   }
 
-  if (screen == 1) {
+  else if (screen == 4 || screen == 5 || screen == 7) {
+    if (backBtn.isClicked()) screen = 2;
+  }
+
+  else if (screen == 1) {
     if (backBtn.isClicked()) screen = 0;
     flightForm.mousePressed();
   }
-  else if (screen == 7) {
-  drawBoardingGatePage();
-}
 }
 
 //make form can scroll down
