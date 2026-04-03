@@ -38,7 +38,9 @@ class StateHeatMap {
 
   void display() {
 
-
+    background(10, 22, 40);
+    fill(255);
+    rect(30,50, 950, 595);
     drawButtons();
     drawTitle();
 
@@ -53,7 +55,6 @@ class StateHeatMap {
 
   void mousePressed() {
     if (trafficBtn.isClicked()) {
-      println("traffic");
       mode = 0;
       buildStateMap();
     }
