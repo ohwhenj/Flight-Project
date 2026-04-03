@@ -20,7 +20,7 @@ loadData();
 }
 
 void display() {
-  background(30);
+  background(10, 22, 40);
 
   String[] airports = mode.equals("delay") ? delayAirports : cancelAirports;
   String[] cities   = mode.equals("delay") ? delayCities   : cancelCities;
@@ -123,7 +123,7 @@ void mousePressed() {
       mouseY >= btn1Y && mouseY <= btn1Y + btnH) {
     mode = "delay";
   }
-  if (mouseX >= btn2X && mouseX <= btn2X + btnW &&
+  else if (mouseX >= btn2X && mouseX <= btn2X + btnW &&
       mouseY >= btn2Y && mouseY <= btn2Y + btnH) {
     mode = "cancelled";
   }
