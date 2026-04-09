@@ -1,6 +1,4 @@
-// Flight Delay Leaderboard — reads from flights2k.csv
-// Place flights2k.csv in your sketch's /data folder
-// Press D for delays, C for cancellations
+
 class LeaderBoard{
 Table table;
 
