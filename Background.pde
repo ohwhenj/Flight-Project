@@ -1,12 +1,15 @@
+/// Roy Zha - Main page UI
 class Background {
   float x, y;
   float speed = 0;
-
+  
+  // where plane at
   Background() {
     x = 220;
     y = 250;
   }
 
+  //how the plane drawn
   void drawPlane() {
     fill(200);
     noStroke();
@@ -35,6 +38,7 @@ class Background {
     noStroke();
   }
 
+  //the road for airplane sliding
   void drawRunway() { 
     fill(0); 
     rect(200, 0, 200, 650); 
@@ -45,6 +49,7 @@ class Background {
     }
   }
 
+  //the movement for the plane
   void movePlane() {
     speed += 0.05;
     y -= speed;
