@@ -1,14 +1,17 @@
+// Conor is responsible for Flight form code 
 ///The FlightForm have Search bar
 class FlightForm {
   //stores and reads flight data
   ArrayList<String[]> flights = new ArrayList<String[]>();
 
+// current form settings
   boolean showDep = true;
   String query = "";
   boolean searchActive = false;
   int scrollRow = 0;
   final int ROWS = 12;
 
+  // search bar and table layout
   final int BTN_Y = 30, BTN_H = 40, BTN_W = 180;
   int depBtnX, arrBtnX;
 
@@ -18,6 +21,7 @@ class FlightForm {
 
   int[] COL;
 
+// colours used 
   final int BG = color(0);
   final int WHITE = color(255);
   final int GREY = color(150);
@@ -25,7 +29,7 @@ class FlightForm {
   final int ORANGE = color(255, 138, 0);
   final int RED = color(255, 55, 55);
 
-  //where is the form
+ // load flight form data
   FlightForm(String filename) {
 
     depBtnX = width/2 - BTN_W - 10;
@@ -60,7 +64,7 @@ class FlightForm {
     return fields.toArray(new String[0]);
   }
 
- //load the csv file
+  // load csv file and build flight records
   void loadCSV(String filename) {
     String[] lines = loadStrings(filename);
     if (lines == null) return;
@@ -104,7 +108,7 @@ class FlightForm {
     }
   }
 
-  // use --- replace null
+  // work out flight status from scheduled and actual time
   String st(String actual, String sched, int cancelled) {
 
     if (cancelled == 1) return "CANCELLED";
@@ -127,7 +131,7 @@ class FlightForm {
     }
   }
 
-//search bar filter
+// filter flights using search bar input
 ArrayList<String[]> filtered() {
   ArrayList<String[]> out = new ArrayList<String[]>();
 
@@ -156,6 +160,7 @@ ArrayList<String[]> filtered() {
   return out;
 }
 
+// draw full flight form page
   void display() {
 
   ArrayList<String[]> data = filtered();
@@ -242,6 +247,7 @@ ArrayList<String[]> filtered() {
     scrollRow = constrain(scrollRow, 0, max(0, data.size() - ROWS));
   }
 
+// type into search bar when active
   void keyPressed() {
     if (!searchActive) return;
 
