@@ -34,6 +34,7 @@ class FlightForm {
     COL = new int[]{TX+20, TX+120, TX+220, TX+320, TX+520, TX+650, TX+770};
     loadCSV(filename);
   }
+
   //split csv file to different fields
   String[] parseCSVLine(String line) {
     ArrayList<String> fields = new ArrayList<String>();
