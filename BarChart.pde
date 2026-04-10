@@ -1,19 +1,26 @@
+// Conor responsible for barchart
+
 class BarChart {
   ArrayList<Flight> flights;
+
+// chart margin values
   float marginLeft   = 120;
   float marginRight  = 80;
   float marginTop    = 80;
   float marginBottom = 60;
 
+// chart labels, values, and colours
   String[] labels;
   int[]    values;
   color[]  barColors;
 
+// load bar chart data
   BarChart(ArrayList<Flight> flights) {
     this.flights = flights;
     processData();
   }
 
+// count flights for each day
   void processData() {
     java.util.HashMap<String, Integer> counts =
       new java.util.HashMap<String, Integer>();
@@ -42,7 +49,7 @@ class BarChart {
       i++;
     }
 
-    // Sort alphabetically
+    // sort dates alphabetically
     for (int a = 0; a < n - 1; a++) {
       for (int b = 0; b < n - a - 1; b++) {
         if (labels[b].compareTo(labels[b + 1]) > 0) {
@@ -56,6 +63,8 @@ class BarChart {
       }
     }
 
+
+// assign repeating colours to bars
     color[] palette = {
       color(70, 130, 180),
       color(255, 127, 80),
@@ -64,6 +73,7 @@ class BarChart {
       color(186, 85, 211),
       color(255, 99, 71)
     };
+
     barColors = new color[n];
     for (int j = 0; j < n; j++) {
       barColors[j] = palette[j % palette.length];
