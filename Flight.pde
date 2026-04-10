@@ -1,4 +1,3 @@
-
 class Flight {
   String flDate;
   String carrier;
