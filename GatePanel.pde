@@ -1,3 +1,5 @@
+// Owen - responsible for boarding gate wall and gatepanel helper class
+
 class GatePanel {
   // panel position and size
   float x, y, w, h;
