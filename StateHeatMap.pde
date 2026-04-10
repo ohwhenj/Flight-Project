@@ -2,11 +2,14 @@
 import java.util.HashMap;
 
 class StateHeatMap {
+  // SVG map and CSV data
   PShape usa;
   Table table;
 
+  // stores traffic values for each state
   HashMap<String, Integer> stateValues;
 
+  // mode buttons
   Button trafficBtn;
   Button departuresBtn;
   Button arrivalsBtn;
@@ -15,9 +18,11 @@ class StateHeatMap {
 
   int mode = 0;   // 0 = traffic, 1 = departures, 2 = arrivals, 3 = difference
 
+  // map position on screen
   float mapX;
   float mapY;
 
+  // load map, CSV, buttons, initial state data
   StateHeatMap(String svgFile, String csvFile, float mapX, float mapY) {
     this.mapX = mapX;
     this.mapY = mapY;
@@ -36,6 +41,7 @@ class StateHeatMap {
     buildStateMap();
   }
 
+  // draw full heat map page
   void display() {
 
     background(10, 22, 40);
@@ -50,9 +56,11 @@ class StateHeatMap {
     strokeWeight(1);
     shape(usa, mapX, mapY);
 
+    // draw coloured state overlay
     drawHeatMap();
   }
 
+  // handle button clicks and switch modes
   void mousePressed() {
     if (trafficBtn.isClicked()) {
       mode = 0;
@@ -75,6 +83,7 @@ class StateHeatMap {
     }
   }
 
+  // draw top control buttons and highlight current mode
   void drawButtons() {
     trafficBtn.display();
     departuresBtn.display();
@@ -99,6 +108,7 @@ class StateHeatMap {
     }
   }
 
+  // draw title text if needed
   void drawTitle() {
     fill(0);
     textAlign(LEFT, CENTER);
@@ -118,6 +128,7 @@ class StateHeatMap {
     }
   }
 
+  // build values for each state depending on selected mode
   void buildStateMap() {
     stateValues.clear();
 
@@ -126,22 +137,27 @@ class StateHeatMap {
       String destState   = row.getString("DEST_STATE_ABR");
 
       if (mode == 0) {
+        // count total traffic
         addValue(originState, 1);
         addValue(destState, 1);
       } 
       else if (mode == 1) {
+        // count departures only
         addValue(originState, 1);
       } 
       else if (mode == 2) {
+        // count arrivals only
         addValue(destState, 1);
       } 
       else if (mode == 3) {
+        // positive for departures, negative for arrivals
         addValue(originState, 1);
         addValue(destState, -1);
       }
     }
   }
 
+  // add value to a state entry in the map
   void addValue(String stateCode, int amount) {
     if (stateCode == null || stateCode.equals("")) {
       return;
@@ -155,6 +171,7 @@ class StateHeatMap {
     }
   }
 
+  // choose which heat map style to draw
   void drawHeatMap() {
     if (mode == 3) {
       drawDifferenceMap();
@@ -164,6 +181,7 @@ class StateHeatMap {
     }
   }
 
+  // draw normal heat map for traffic, departures, or arrivals
   void drawNormalMap() {
     int maxValue = getMaxValue();
 
@@ -184,6 +202,7 @@ class StateHeatMap {
     }
   }
 
+  // draw difference map with red for positive and blue for negative
   void drawDifferenceMap() {
     int maxAbs = getMaxAbsValue();
 
@@ -214,6 +233,7 @@ class StateHeatMap {
     }
   }
 
+  // find max value for normal heat map scaling
   int getMaxValue() {
     int maxValue = 0;
 
@@ -227,6 +247,7 @@ class StateHeatMap {
     return maxValue;
   }
 
+  // find largest absolute value for difference mode scaling
   int getMaxAbsValue() {
     int maxAbs = 0;
 
