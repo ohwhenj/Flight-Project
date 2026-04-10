@@ -1,18 +1,23 @@
 import java.util.HashMap;
 import java.util.ArrayList;
 
+// scroll values for moving through all state panels
 float scrollY = 0;
 float minScrollY = 0;
 float maxScrollY = 0;
 
 class BoardingGateWall {
+  // flight data and gate panels
   Table table;
   ArrayList<GatePanel> panels;
 
+  // all state codes found in CSV
 ArrayList<String> statesToShow;
 
+  // currently selected state
   String selectedState = "CA";
 
+  // load CSV and build panel data
 BoardingGateWall(String filename) {
   table = loadTable(filename, "header");
   panels = new ArrayList<GatePanel>();
@@ -25,6 +30,7 @@ BoardingGateWall(String filename) {
   }
 }
 
+// build one panel per state
 void buildPanels() {
   panels.clear();
 
@@ -52,6 +58,8 @@ float startY = 82;
 
     panels.add(new GatePanel(x, y, panelW, panelH, gateLabel, state, dep, arr));
   }
+
+  // work out scroll limits based on content height
   int rows = (int)ceil(statesToShow.size() / 4.0);
 float contentBottom = 100 + rows * (150 + 18);
 float visibleBottom = 560;
@@ -60,6 +68,7 @@ minScrollY = min(0, visibleBottom - contentBottom);
 maxScrollY = 0;
 }
 
+  // count departures from a given state
   int countDepartures(String state) {
     int count = 0;
 
@@ -73,6 +82,7 @@ maxScrollY = 0;
     return count;
   }
 
+  // count arrivals into a given state
   int countArrivals(String state) {
     int count = 0;
 
@@ -86,6 +96,7 @@ maxScrollY = 0;
     return count;
   }
 
+  // find the most common origin airport for the selected state
   String getTopOriginAirport(String state) {
     HashMap<String, Integer> airportCounts = new HashMap<String, Integer>();
 
@@ -115,6 +126,7 @@ maxScrollY = 0;
     return topAirport;
   }
 
+// draw full boarding gate wall page
 void display() {
   background(10, 22, 40);
 
@@ -123,6 +135,7 @@ void display() {
   drawBottomBar();
 }
 
+// draw page title
 void drawTitle() {
   fill(245);
   textAlign(CENTER, CENTER);
@@ -135,6 +148,7 @@ void drawTitle() {
   text("Click a gate to inspect state traffic", width / 2, 62);
 }
 
+// draw all gate panels with veritcal scrolling
 void drawPanels() {
   pushMatrix();
   translate(0, scrollY);
@@ -147,6 +161,7 @@ void drawPanels() {
   popMatrix();
 }
 
+// draw fixed info bar at the bottom
 void drawBottomBar() {
   int dep = countDepartures(selectedState);
   int arr = countArrivals(selectedState);
@@ -168,6 +183,7 @@ void drawBottomBar() {
   text("Top Origin Airport: " + topAirport, 570, height - 27);
 }
 
+// handle clicking on a panel
 void mousePressed() {
   float adjustedMouseY = mouseY - scrollY;   
 
@@ -180,6 +196,7 @@ void mousePressed() {
   }
 }
 
+// build list of unique states from the CSV
 void buildStateList() {
   statesToShow = new ArrayList<String>();
 
@@ -196,9 +213,11 @@ void buildStateList() {
     }
   }
 
+  // sort alphabetically
   statesToShow.sort(null);
 }
 
+// scroll panel grid with mouse wheel
 void mouseWheel(float amount) {
   scrollY -= amount * 20;
 
