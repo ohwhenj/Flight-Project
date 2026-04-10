@@ -1,5 +1,5 @@
-StateHeatMap heatMap;
-StateQueryChart stateChart;
+StateHeatMap heatMap;        // heat map visualisation
+StateQueryChart stateChart;  // state search/query chart
 
 int screen = 0;
 Table table;
@@ -14,11 +14,12 @@ Button backBtn;
 Button barChartBtn;
 Button barChart2Btn;
 
+// graph buttons for added visualisations
 Button heatMapBtn;
 Button stateQueryBtn;
 
-BoardingGateWall boardingGateWall;
-Button boardingGateBtn;
+BoardingGateWall boardingGateWall;    // boarding gate wall visual
+Button boardingGateBtn;               // button to open boarding gate wall
 
 
 Background plane;
@@ -32,7 +33,8 @@ void setup() {
   loadData();
   barChart = new BarChart(flights);
   leaderBoard = new LeaderBoard();
-  
+
+  // load SVG heat map using flight dataset
   heatMap = new StateHeatMap("usa-wikipedia.svg", "flights2k.csv", -250, -110);
 
 
@@ -42,6 +44,8 @@ void setup() {
   
   barChartBtn = new Button(40, 90, 150, 50, "Bar Chart");
   barChart2Btn = new Button(220, 90, 150, 50, "Leader board");
+
+  // buttons for custom graph features
   heatMapBtn = new Button(610, 90, 150, 50, "Heat Map");
   stateQueryBtn = new Button(790, 90, 180, 50, "State Query Chart");
   boardingGateBtn = new Button(400, 90, 180, 50, "Boarding Gate Wall");
@@ -49,6 +53,8 @@ void setup() {
   plane = new Background();
 
   flightForm = new FlightForm("flights2k.csv");
+
+  // create boarding wall and searchable state chart
   boardingGateWall = new BoardingGateWall("flights2k.csv");
   stateChart = new StateQueryChart("flights2k.csv");
 }
@@ -101,6 +107,7 @@ void drawFlights() {
   flightForm.display(); 
 }
 
+// draws boarding gate wall page
 void drawBoardingGatePage() {
   boardingGateWall.display();
   backBtn.display();
@@ -115,6 +122,8 @@ void drawGraphs() {
   
   barChartBtn.display();
   barChart2Btn.display();
+
+  // graph menu options for heat map, query chart, and boarding wall and back button
   heatMapBtn.display();
   stateQueryBtn.display();
   backBtn.display();
@@ -131,6 +140,7 @@ void drawBarChartPage2() {
   backBtn.display();
 }
 
+// draws heat map page
 void drawHeatMapPage() {
   heatMap.display();
   backBtn.display();
@@ -190,7 +200,7 @@ void mousePressed() {
   }
 }
 
-//make form can scroll down
+// make form can scroll down
 void mouseDragged() {
   if (screen == 1) flightForm.mouseDragged();
 }
