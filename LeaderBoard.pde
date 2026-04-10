@@ -13,10 +13,12 @@ String[] delayAirports, cancelAirports;
 String[] delayCities,   cancelCities;
 float[]  delayVals,     cancelVals;
 
+// constructor: load data from csv
 LeaderBoard() {
-loadData();
+  loadData();
 }
 
+// display leaderboard UI and draw bars
 void display() {
   background(10, 22, 40);
 
@@ -94,6 +96,7 @@ void display() {
   }
 }
 
+// draw button with hover and active effect
 void drawButton(int x, int y, int w, int h, String label, boolean active) {
   boolean over = mouseX >= x && mouseX <= x + w &&
                  mouseY >= y && mouseY <= y + h;
@@ -138,11 +141,13 @@ void mouseMoved() {
   }
 }
 
+// reset hover when mouse leaves screen
 void mouseExited() {
   hoveredRow = -1;
 }
 
 
+// load and process flight data from csv file
 void loadData() {
   table = loadTable("flights2k.csv", "header");
 
@@ -220,11 +225,13 @@ void loadData() {
   }
 }
 
+// convert HHMM time format to minutes
 float hhmm(float t) {
   int ti = (int) t;
   return (ti / 100) * 60 + (ti % 100);
 }
 
+// sort values in descending order and return index order
 int[] sortDescending(float[] arr) {
   int n = arr.length;
   int[] idx = new int[n];
