@@ -1,6 +1,6 @@
 ///The FlightForm have Search bar
 class FlightForm {
-
+  //stores and reads flight data
   ArrayList<String[]> flights = new ArrayList<String[]>();
 
   boolean showDep = true;
@@ -25,6 +25,7 @@ class FlightForm {
   final int ORANGE = color(255, 138, 0);
   final int RED = color(255, 55, 55);
 
+  //where is the form
   FlightForm(String filename) {
 
     depBtnX = width/2 - BTN_W - 10;
@@ -33,7 +34,7 @@ class FlightForm {
     COL = new int[]{TX+20, TX+120, TX+220, TX+320, TX+520, TX+650, TX+770};
     loadCSV(filename);
   }
-  
+  //split csv file to different fields
   String[] parseCSVLine(String line) {
     ArrayList<String> fields = new ArrayList<String>();
     boolean inQuotes = false;
@@ -58,6 +59,7 @@ class FlightForm {
     return fields.toArray(new String[0]);
   }
 
+ //load the csv file
   void loadCSV(String filename) {
     String[] lines = loadStrings(filename);
     if (lines == null) return;
@@ -101,6 +103,7 @@ class FlightForm {
     }
   }
 
+  // use --- replace null
   String st(String actual, String sched, int cancelled) {
 
     if (cancelled == 1) return "CANCELLED";
@@ -123,6 +126,7 @@ class FlightForm {
     }
   }
 
+//search bar filter
 ArrayList<String[]> filtered() {
   ArrayList<String[]> out = new ArrayList<String[]>();
 
@@ -160,6 +164,7 @@ ArrayList<String[]> filtered() {
   drawTable(data);
 }
 
+  //the different two buttons
   void drawToggle() {
     textAlign(CENTER, CENTER);
 
@@ -183,7 +188,7 @@ ArrayList<String[]> filtered() {
   textAlign(LEFT, CENTER);
   text("SEARCH: " + query, TX + 10, SY + SH/2);
 }
-
+ // create the table
   void drawTable(ArrayList<String[]> data) {
 
     String[] headers = { "FLIGHT", "FROM", "TO", "CITY", "SCHED", "ACTUAL", "STATUS" };
