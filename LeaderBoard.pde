@@ -1,7 +1,8 @@
-
+// Conor responsible for Leaderboard
 class LeaderBoard{
 Table table;
 
+// current display mode and hovered row
 String mode       = "delay";
 int    hoveredRow = -1;
 int    SHOW_ROWS  = 10;
@@ -9,16 +10,17 @@ int    SHOW_ROWS  = 10;
 int btn1X = 160,  btn1Y = 70, btnW = 140, btnH = 30;
 int btn2X = 370, btn2Y = 70;
 
+// ranked airport data for both modes
 String[] delayAirports, cancelAirports;
 String[] delayCities,   cancelCities;
 float[]  delayVals,     cancelVals;
 
-// constructor: load data from csv
+// load leaderboard data
 LeaderBoard() {
   loadData();
 }
 
-// display leaderboard UI and draw bars
+// draw full leaderboard page
 void display() {
   background(10, 22, 40);
 
@@ -64,14 +66,14 @@ void display() {
       rect(8, y - 2, width - 16, 39, 4);
     }
 
-    // Rank
+    // draw ranking number
     if (i < 3) fill(239, 159, 39);
     else        fill(100);
     textSize(13);
     textAlign(RIGHT);
     text(i + 1, 32, y + 20);
 
-    // Airport code
+    // draw airport code
     fill(255);
     textSize(15);
     textAlign(LEFT);
@@ -82,13 +84,13 @@ void display() {
     textSize(12);
     text(cities[i], 100, y + 20);
 
-    // Bar
+    // Darw valur Bar
     float bw = (vals[i] / maxVal) * BAR_MAX_W;
     fill(red(barColor), green(barColor), blue(barColor), isHovered ? 255 : 180);
     noStroke();
     rect(BAR_X, y + 6, bw, 20, 3);
 
-    // Value label
+    // Draw value label
     fill(isHovered ? 255 : 170);
     textSize(13);
     textAlign(LEFT);
