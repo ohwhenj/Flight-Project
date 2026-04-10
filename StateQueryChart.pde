@@ -1,3 +1,5 @@
+// Owen - Handled state query chart implementation
+
 class StateQueryChart {
   // stores CSV flight data
   Table table;
