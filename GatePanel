@@ -1,11 +1,17 @@
 class GatePanel {
+  // panel position and size
   float x, y, w, h;
+
+  // gate/state info
   String gateLabel;
   String stateCode;
+
+  // flight values for this state
   int departures;
   int arrivals;
   int net;
 
+  // set up one gate panel with its data
   GatePanel(float x, float y, float w, float h,
             String gateLabel, String stateCode,
             int departures, int arrivals) {
@@ -20,12 +26,16 @@ class GatePanel {
     this.net = departures - arrivals;
   }
 
+// draw one panel
 void display(boolean selected) {
+// check hover using scroll-adjusted mouse position
 boolean hovered = isMouseOver(scrollY);
-  // outer card
+  
+  // card border changes if selected
   stroke(selected ? color(120, 170, 255) : color(70, 85, 105));
   strokeWeight(selected ? 2.5 : 1);
 
+  // slight colour change on hover
   if (hovered) {
     fill(28, 34, 44);
   } else {
@@ -60,6 +70,7 @@ boolean hovered = isMouseOver(scrollY);
     statusColor = color(140);
   }
 
+  // draw status pill
   noStroke();
   fill(statusColor);
   rect(x + w - 96, y + 10, 84, 20, 10);
@@ -69,7 +80,7 @@ boolean hovered = isMouseOver(scrollY);
   textSize(10);
   text(statusText, x + w - 54, y + 20);
 
-  // stats
+  // draw state stats
   textAlign(LEFT, TOP);
 
   fill(70, 130, 220);
@@ -89,6 +100,7 @@ boolean hovered = isMouseOver(scrollY);
   text("NET  " + net, x + 12, y + 120);
 }
 
+  // check if mouse is over this panel, accounting for scroll
   boolean isMouseOver(float scrollY) {
   float adjustedMouseY = mouseY - scrollY;
 
