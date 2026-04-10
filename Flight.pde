@@ -9,6 +9,7 @@ class Flight {
   int    diverted;
   int    distance;
 
+  //Converts CSV rows into objects
   Flight(TableRow row) {
     flDate    = row.getString("FL_DATE");
     carrier   = row.getString("MKT_CARRIER");
@@ -21,6 +22,7 @@ class Flight {
     distance  = row.getInt("DISTANCE");
   }
 
+ //Provides useful methods
   boolean isCancelled() { return cancelled == 1; }
   boolean isDiverted()  { return diverted  == 1; }
   String  getOrigin()   { return origin; }
